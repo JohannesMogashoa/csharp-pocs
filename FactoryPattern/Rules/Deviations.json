@@ -1,0 +1,118 @@
+[
+  {
+    "WorkflowName": "Deviation",
+    "Rules": [
+      {
+        "RuleName": "Full",
+        "SuccessEvent": "[\"SetTargetFull\", \"NewRoute\", \"RecalculateOpenRouteTarget\"]",
+        "ErrorMessage": "This is not a target full deviation",
+        "ErrorType": "Error",
+        "Operator": "AndAlso",
+        "Rules": [
+          {
+            "RuleName": "IsPutAway",
+            "ErrorMessage": "One or more adjust rules failed.",
+            "ErrorType": "Error",
+            "Expression": "input1.process == \"putaway\""
+          },
+          {
+            "RuleName": "IsTargetFull",
+            "ErrorMessage": "One or more adjust rules failed.",
+            "ErrorType": "Error",
+            "Expression": "input1.deviation == \"targetFull\""
+          },
+          {
+            "RuleName": "IsHuMove",
+            "ErrorMessage": "One or more adjust rules failed.",
+            "ErrorType": "Error",
+            "Expression": "input1.function == \"HuMove\""
+          }
+        ]
+      },
+      {
+        "RuleName": "Damages",
+        "SuccessEvent": "[\"RouteToQuarantine\"]",
+        "ErrorMessage": "This is not a damages deviation",
+        "ErrorType": "Error",
+        "Operator": "AndAlso",
+        "Rules": [
+          {
+            "RuleName": "IsReceiving",
+            "ErrorMessage": "One or more adjust rules failed.",
+            "ErrorType": "Error",
+            "Expression": "input1.process == \"receiving\""
+          },
+          {
+            "RuleName": "IsHuMove",
+            "ErrorMessage": "One or more adjust rules failed.",
+            "ErrorType": "Error",
+            "Expression": "input1.function == \"HuMove\" || input1.function == \"HuSplit\""
+          }
+        ]
+      },
+      {
+        "RuleName": "Full Inventory",
+        "SuccessEvent": "[\"SetTargetFull\", \"NewRoute\", \"RecalculateOpenRouteTarget\"]",
+        "ErrorMessage": "This is not a damages deviation",
+        "ErrorType": "Error",
+        "Operator": "AndAlso",
+        "Rules": [
+          {
+            "RuleName": "IsReplenishment",
+            "ErrorMessage": "One or more adjust rules failed.",
+            "ErrorType": "Error",
+            "Expression": "input1.process == \"replenishment\""
+          },
+          {
+            "RuleName": "IsHuMove",
+            "ErrorMessage": "One or more adjust rules failed.",
+            "ErrorType": "Error",
+            "Expression": "input1.function == \"HuMove\" || input1.function == \"HuSplit\""
+          }
+        ]
+      },
+      {
+        "RuleName": "WrongBarcode",
+        "SuccessEvent": "[\"RouteToQuarantine\"]",
+        "ErrorMessage": "This is not a WrongBarcode deviation",
+        "ErrorType": "Error",
+        "Operator": "AndAlso",
+        "Rules": [
+          {
+            "RuleName": "IsRouting",
+            "ErrorMessage": "One or more adjust rules failed.",
+            "ErrorType": "Error",
+            "Expression": "input1.process == \"routing\""
+          },
+          {
+            "RuleName": "IsHuMove",
+            "ErrorMessage": "One or more adjust rules failed.",
+            "ErrorType": "Error",
+            "Expression": "input1.function == \"HuSplit\""
+          }
+        ]
+      },
+      {
+        "RuleName": "WrongBarcode Inbound",
+        "SuccessEvent": "[\"RouteToDamages\"]",
+        "ErrorMessage": "This is not a WrongBarcode deviation",
+        "ErrorType": "Error",
+        "Operator": "AndAlso",
+        "Rules": [
+          {
+            "RuleName": "IsRouting",
+            "ErrorMessage": "One or more adjust rules failed.",
+            "ErrorType": "Error",
+            "Expression": "input1.process == \"receiving\""
+          },
+          {
+            "RuleName": "IsHuMove",
+            "ErrorMessage": "One or more adjust rules failed.",
+            "ErrorType": "Error",
+            "Expression": "input1.function == \"HuSplit\""
+          }
+        ]
+      }
+    ]
+  }
+]
